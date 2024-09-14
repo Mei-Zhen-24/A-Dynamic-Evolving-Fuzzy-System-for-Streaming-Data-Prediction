@@ -14,7 +14,7 @@ Please cite the paper above if this code helps.
 
 Programmed by Zhen Mei.
 
-The code is written with reference to the code of Dr. Gu Xiaowei, whose github website is <https://github.com/Gu-X>
+The code is written with reference to the code of Dr. Xiaowei Gu, whose github website is <https://github.com/Gu-X>
 
 Thanks to Dr. Tao Zhao and Dr. Xiaowei Gu for their help and support in this paper and the code.
 
