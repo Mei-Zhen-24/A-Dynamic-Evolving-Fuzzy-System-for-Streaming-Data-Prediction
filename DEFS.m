@@ -8,26 +8,26 @@
 %==========================================================================================================
 %% Please cite the paper above if this code helps.
 
-%% For any queries about the code, please contact Dr. ZhenMei
+%% For any queries about the code, please contact PhD ZhenMei
 %% meizhen185023@163.com
 
 %% Programmed by ZhenMei
 
 function YTestPre = DEFS(DataTrain, DataTest, xi0, omega0, zeta, chi0, rhoMax, rhoMin)
 tic
-%% µÃµ½ÑµÁ·Êý¾ÝµÄÎ¬¶È
+%% å¾—åˆ°è®­ç»ƒæ•°æ®çš„ç»´åº¦
 [TTrain, DimN] = size(DataTrain);
-%% ³õÊ¼»¯Ô¤²âÊä³ö
+%% åˆå§‹åŒ–é¢„æµ‹è¾“å‡º
 % YTrainPre = zeros(TTrain,1);
 % ErroTrain = zeros(TTrain,1);
-%% Ä¬ÈÏ³¬²ÎÊý
+%% é»˜è®¤è¶…å‚æ•°
 % xi0 = 0.5;
 % omega0 = 0.5;
 % zeta = 0.95;
 % chi0 = 0.05;
 % rhoMax = 0.9;
 % rhoMin = 0.7;
-%% ²»±ä²ÎÊý
+%% ä¸å˜å‚æ•°
 M = DimN-1;
 theta0 = 1000;
 sigma0 = 1e-10;
@@ -38,7 +38,7 @@ epsilon = 3;
 Delta1 = 2;
 Delta2 = 5;
 t1 = 0;
-%% ×ÛºÏ¾àÀë¶ÈÁ¿Ïà¹Ø²ÎÊý 
+%% ç»¼åˆè·ç¦»åº¦é‡ç›¸å…³å‚æ•° 
 % Please refer to the paper ``An approach to online identification of Takagi-Sugeno fuzzy models``
 alphaX = 1/(1+M);
 alphaY = 1-alphaX;
@@ -48,7 +48,7 @@ SigmaX = VarThetaX;
 SigmaY = VarThetaY;
 BetaX = DataTrain(1,1:end-1);
 BetaY = DataTrain(1,end);
-%% Ê¹ÓÃµÚÒ»¸öÊý¾Ýµã³õÊ¼»¯Ä£ºýÏµÍ³
+%% ä½¿ç”¨ç¬¬ä¸€ä¸ªæ•°æ®ç‚¹åˆå§‹åŒ–æ¨¡ç³Šç³»ç»Ÿ
 C = 1;
 N = 1;
 m = DataTrain(1,1:M);
@@ -57,7 +57,7 @@ SigmaInv = 1/sigma0*eye(M);
 Theta = eye(M+1)*theta0;
 v = 1;
 eta = 1;
-%% Ê¹ÓÃµÚÒ»¸öÊý¾Ýµã¸üÐÂºó¼þÖµ
+%% ä½¿ç”¨ç¬¬ä¸€ä¸ªæ•°æ®ç‚¹æ›´æ–°åŽä»¶å€¼
 t = 1;
 RIUse = 1;
 datain = DataTrain(t,1:end-1);
@@ -69,47 +69,47 @@ KIn = Theta(:,:,RIUse)*dataEx'*(1/(zeta+dataEx*Theta(:,:,RIUse)*dataEx'));
 A1 = a(RIUse,:)'+ KIn*ErroTrain;
 Theta(:,:,RIUse) = 1/zeta*( Theta(:,:,RIUse) - KIn*dataEx*Theta(:,:,RIUse));
 a(RIUse,:)=A1';
-%% ÑµÁ·½×¶Î
+%% è®­ç»ƒé˜¶æ®µ
 for t = 2:TTrain
     if C >= 50
-        disp('£¿')
+        disp('ï¼Ÿ')
     end
-    %% µÃµ½Êý¾Ýµã
+    %% å¾—åˆ°æ•°æ®ç‚¹
     datain = DataTrain(t,1:M);
     dataout = DataTrain(t,end);
-    %% ¼ÆËãÁ¥Êô¶È
+    %% è®¡ç®—éš¶å±žåº¦
     Mu = zeros(C,1);
     for RIUse = 1:C
         Mu(RIUse) = exp( -1/2*(datain - m(RIUse,:)) * SigmaInv(:,:,RIUse) * (datain - m(RIUse,:))' )+eps;
     end
     Lamada = Mu./sum(Mu);
-    %% ¼ÆËãÐÂÊý¾ÝµÄÇ±Á¦Öµ
+    %% è®¡ç®—æ–°æ•°æ®çš„æ½œåŠ›å€¼
     VarThetaX = sum(datain.*datain,2);
     VarThetaY = dataout.*dataout;
     VX = sum(datain.*BetaX,2);
     VY = sum(dataout.*BetaY,2);
     PT = (t-1)/( (t-1)*(1+alphaX*VarThetaX+alphaY*VarThetaY) + alphaX*(SigmaX-2*VX) + alphaY*(SigmaY-2*VY)+eps );
-    %% ¸üÐÂsigma0
+    %% æ›´æ–°sigma0
     sigma0 = (t-1)^2/t^2*sigma0+4*(1-PT)/(PT*t^2);
-    %% ¸üÐÂ²ÎÊý
+    %% æ›´æ–°å‚æ•°
     SigmaX = SigmaX + VarThetaX;
     SigmaY = SigmaY + VarThetaY;
     BetaX = BetaX + datain;
     BetaY = BetaY + dataout;
-    %% ¼ÆËãµ±Ç°Êý¾Ýµãµ½ËùÓÐÖÐÐÄµÄ×îÐ¡¾àÀë
+    %% è®¡ç®—å½“å‰æ•°æ®ç‚¹åˆ°æ‰€æœ‰ä¸­å¿ƒçš„æœ€å°è·ç¦»
     Psi = sqrt(sum((datain - m).*(datain - m),2));
     Psi = Psi';
     OmegaT = PT *min(Psi);
-    %% »ñµÃ¾Ö²¿Îó²îÄ£ÐÍ£º
+    %% èŽ·å¾—å±€éƒ¨è¯¯å·®æ¨¡åž‹ï¼š
     YI = Lamada'*dataout;
     dataEx=[1,datain];
     ErrorI = YI-dataEx*a'.*Lamada';
     ErrorI2 = ErrorI.^2;
     Delta = max(ErrorI2);
-    %% ¼ÆËãÊý¾Ýµã·ÖÅä¹æÔò
+    %% è®¡ç®—æ•°æ®ç‚¹åˆ†é…è§„åˆ™
     Phi = exp(-abs(ErrorI2)/(sum(abs(ErrorI2))+eps)).*(sum(Psi)./(Psi+eps));
     [~,Kappa] = max(Phi);
-    %% ÅÐ¶ÏÊÇ·ñÐÂÔö¹æÔò
+    %% åˆ¤æ–­æ˜¯å¦æ–°å¢žè§„åˆ™
     if (Delta>=(varpi(Kappa)+epsilon*xi(Kappa))||OmegaT>=omega0)&&(C<60)&&t1>Delta1
         C = C+1;
         N = [N,1];
@@ -124,7 +124,7 @@ for t = 2:TTrain
         Mu = [Mu;1];
         t1 = 0;
     else
-        %% ¸üÐÂ¾àÀëµ±Ç°µã×î½üµÄ¼¯Èº
+        %% æ›´æ–°è·ç¦»å½“å‰ç‚¹æœ€è¿‘çš„é›†ç¾¤
         N(Kappa) = N(Kappa)+1;
         SN = N(Kappa);
         m(Kappa,:) = m(Kappa,:) + (datain - m(Kappa,:))/SN;
@@ -133,7 +133,7 @@ for t = 2:TTrain
         xi(Kappa) = (N(Kappa)-1)/N(Kappa)*xi(Kappa)+(N(Kappa)-1)/N(Kappa)^2*(ErrorI2(Kappa)-varpi(Kappa)).^2;
         varpi(Kappa) = varpi(Kappa)+(ErrorI2(Kappa)-varpi(Kappa))/N(Kappa);
     end
-    %% ÅÐ¶ÏÊÇ·ñÒªºÏ²¢¹æÔò
+    %% åˆ¤æ–­æ˜¯å¦è¦åˆå¹¶è§„åˆ™
     if (mod(t,Delta2)==0) && t1 > Delta1
         RhoT = (-(rhoMax - rhoMin)./(1+exp(-10*C/30+5))+rhoMax)^M;
         MuJK = zeros(C,C);
@@ -149,7 +149,7 @@ for t = 2:TTrain
         if MaxVaule2 > RhoT
             MergerJ = min(MaxIndex2,MaxIndex1(MaxIndex2));
             MergerK = max(MaxIndex2,MaxIndex1(MaxIndex2));
-            %% ÉèÖÃºÏ²¢µÄÐÂ¹æÔò²ÎÊý
+            %% è®¾ç½®åˆå¹¶çš„æ–°è§„åˆ™å‚æ•°
             N = [N,N(MergerJ)+N(MergerK)];
             m(C+1,:) = (m(MergerJ,:)*N(MergerJ)+m(MergerK,:)*N(MergerK))/(N(MergerJ)+N(MergerK));
             SigmaInv(:,:,C+1) =inv( (inv(SigmaInv(:,:,MergerJ))*N(MergerJ)+inv(SigmaInv(:,:,MergerK))*N(MergerK))/(N(MergerJ)+N(MergerK)) );
@@ -161,7 +161,7 @@ for t = 2:TTrain
             eta = [eta;1];
             MuNow = exp( -1/2* (datain - m(C+1,:)) *SigmaInv(:,:,C+1)*(datain - m(C+1,:))')+eps;
             Mu = [Mu; MuNow];
-            %% É¾³ý±»ºÏ²¢µÄ¹æÔò²ÎÊý
+            %% åˆ é™¤è¢«åˆå¹¶çš„è§„åˆ™å‚æ•°
             MonDelIndex = [MergerJ,MergerK];
             v(MonDelIndex) = [];
             N(MonDelIndex) = [];
@@ -176,14 +176,14 @@ for t = 2:TTrain
             C = C-1;
         end
     end
-    %% ¼ÆËãÐ§ÓÃÖµ
+    %% è®¡ç®—æ•ˆç”¨å€¼
     if t1 > Delta1
         Lamada = Mu./sum(Mu);
         eta = eta + (Lamada - eta)./(t*ones(length(v),1)-v+1);
         Chi = eta./(eps+sqrt(varpi));
         MonDelIndex = find( Chi  < chi0);
         if ~isempty(MonDelIndex) && C > length(MonDelIndex)
-            %% É¾³ý¹æÔò
+            %% åˆ é™¤è§„åˆ™
             v(MonDelIndex) = [];
             N(MonDelIndex) = [];
             a(MonDelIndex,:) = [];
@@ -198,7 +198,7 @@ for t = 2:TTrain
             C = C-length(MonDelIndex);
         end
     end
-    %% ¼ÆËãÊä³ö
+    %% è®¡ç®—è¾“å‡º
     t1 = t1+1;
     Mu = zeros(C,1);
     for RIUse = 1:C
@@ -213,7 +213,7 @@ for t = 2:TTrain
     dataEx=[1,datain];
     Ypre = dataEx*a(RUse,:)'*Lamada;
     ErroTrain = dataout - Ypre;
-    %% Ê¹ÓÃ´øÒÅÍüÒò×ÓµÄ¾Ö²¿×îÐ¡¶þ³ËËã·¨
+    %% ä½¿ç”¨å¸¦é—å¿˜å› å­çš„å±€éƒ¨æœ€å°äºŒä¹˜ç®—æ³•
     for RI = 1:length(RUse)
         RIUse = RUse(RI);
         KIn = Theta(:,:,RIUse)*dataEx'*(Lamada(RI) /( zeta + Lamada(RI)*dataEx*Theta(:,:,RIUse)*dataEx'));
@@ -222,7 +222,7 @@ for t = 2:TTrain
         a(RIUse,:)=A1';
     end
 end
-%% ²âÊÔ½×¶Î
+%% æµ‹è¯•é˜¶æ®µ
 TTest = length(DataTest);
 ErrorTest = zeros(TTest,1);
 YTestPre = zeros(TTest,1);
@@ -233,7 +233,7 @@ for t = 1:TTest
     for RIUse = 1:C
         Mu(RIUse) = exp( -1/2 * (datain - m(RIUse,:)) * SigmaInv(:,:,RIUse) * (datain - m(RIUse,:))' )+eps;
     end
-    %% µÃµ½Âú×ãÒªÇóµÄ¹æÔò
+    %% å¾—åˆ°æ»¡è¶³è¦æ±‚çš„è§„åˆ™
     AddMu = sum(Mu);
     [MuStar,RStar] = sort(Mu,'descend');
     CStar = find((cumsum(MuStar)-gamma*AddMu)>0);
@@ -245,7 +245,7 @@ for t = 1:TTest
     ErrorTest(t) = dataout - YTestPre(t);
 end
 toc
-%% Êä³ö½á¹û
+%% è¾“å‡ºç»“æžœ
 RMSE = sqrt(sum(ErrorTest.^2)/TTest);
 NDEI = RMSE/std(DataTest(:,end));
 disp([' RMSE is ' num2str(RMSE)]);
