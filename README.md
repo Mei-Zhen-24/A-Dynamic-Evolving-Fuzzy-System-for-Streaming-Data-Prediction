@@ -18,4 +18,4 @@ The code is written with reference to the code of Dr. Xiaowei Gu, whose github w
 
 Thanks to Dr. Tao Zhao and Dr. Xiaowei Gu for their help and support in this paper and the code.
 
-For any queries about the code, please contact Dr. ZhenMei: <meizhen185023@163.com>
+For any queries about the code, please contact PhD ZhenMei: <meizhen185023@163.com>
