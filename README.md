@@ -1,4 +1,4 @@
-# A-Dynamic-Evolving-Fuzzy-System-for-Streaming-Data-Prediction
+# A Dynamic Evolving Fuzzy System for Streaming Data Prediction
 
 The MATLAB code for the research paper titled "A Dynamic Evolving Fuzzy System for Streaming Data Prediction".
 
